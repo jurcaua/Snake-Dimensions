@@ -5,12 +5,16 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 
 	public GameObject jumpTrigger;
 	public float bodyPartTimeOut = 0.5f;
+	public float turningRate;
+
+	[HideInInspector] public bool isFPS = false;
 
 	private Rigidbody r;
 	private float vertical = 0f;
 	private float horizontal = -1f;
 	private float speed;
 	private float jumpValue;
+	private string directionFacing = "left";
 
 	private SnakeController snakeController;
 
@@ -30,6 +34,7 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 
 	void FixedUpdate () {
 		Move ();
+		Rotate ();
 	}
 
 	void getInput(){
@@ -39,6 +44,23 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 
 			vertical = Input.GetAxisRaw ("Vertical");
 			horizontal = Input.GetAxisRaw ("Horizontal");
+
+			if (isFPS) {
+				if (directionFacing == "up") {
+					// do nothing cause it works normally
+				} else if (directionFacing == "down") {
+					horizontal = -horizontal;
+					vertical = -vertical;
+				} else if (directionFacing == "left") {
+					float temp = vertical;
+					vertical = horizontal;
+					horizontal = -temp;
+				} else if (directionFacing == "right") { 
+					float temp = vertical;
+					vertical = -horizontal;
+					horizontal = temp;
+				}
+			}
 
 			if (Mathf.Abs (vertical) == 1f && Mathf.Abs (horizontal) == 1f) {
 				if (Mathf.Abs (pastVert) == 1f) {
@@ -67,10 +89,27 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 	}
 
 	void Move(){
-		//Vector3 movement = new Vector3 (horizontal * speed * Time.deltaTime, 0f, vertical * speed * Time.deltaTime);
-
 		r.velocity = new Vector3 (horizontal * speed, r.velocity.y, vertical * speed);
-		//r.MovePosition(r.position + movement);
+	}
+
+	void Rotate(){
+		Quaternion targetRotation;
+		if (vertical == 1 && horizontal == 0) { // going up
+			targetRotation = Quaternion.Euler (new Vector3 (0, 0, 0));
+			directionFacing = "up";
+		} else if (vertical == -1 && horizontal == 0) { // going down
+			targetRotation = Quaternion.Euler (new Vector3 (0, 180, 0));
+			directionFacing = "down";
+		} else if (vertical == 0 && horizontal == 1) { // going right
+			targetRotation = Quaternion.Euler (new Vector3 (0, 90, 0));
+			directionFacing = "right";
+		} else if (vertical == 0 && horizontal == -1) { // going left
+			targetRotation = Quaternion.Euler (new Vector3 (0, -90, 0));
+			directionFacing = "left";
+		} else {
+			targetRotation = Quaternion.identity; // wont happen but just in case
+		}
+		transform.rotation = Quaternion.RotateTowards (transform.rotation, targetRotation, turningRate * Time.deltaTime); // smooth rotation
 	}
 
 	public Vector3 getPosition(){
@@ -90,12 +129,12 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 	}
 
 	bool onGround(){
-		return Physics.Raycast (transform.position, Vector3.down, transform.lossyScale.x / 2 + 0.1f);
+		return Physics.Raycast (transform.position, Vector3.down, transform.lossyScale.x / 2 + 0.1f); // check if its touching the floor
 	}
 
 	public void Jump(){
-		GameObject temp = Instantiate (jumpTrigger, transform.position, transform.rotation) as GameObject;
-		Destroy(temp, snakeController.nBodyParts * bodyPartTimeOut);
-		r.velocity += new Vector3 (0, jumpValue, 0);
+		GameObject temp = Instantiate (jumpTrigger, transform.position, transform.rotation) as GameObject; // cretaing the jump trigger
+		Destroy(temp, snakeController.nBodyParts * bodyPartTimeOut); // destory it after some time according to length of snake
+		r.velocity += new Vector3 (0, jumpValue, 0); // JUMPPP
 	}
 }
