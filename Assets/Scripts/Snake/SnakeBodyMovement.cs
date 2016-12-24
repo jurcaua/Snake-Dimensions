@@ -6,7 +6,7 @@ public class SnakeBodyMovement : MonoBehaviour {
 	[HideInInspector] public Vector3 jumpLocation = Vector3.up;
 	[HideInInspector] public int bodyNum;
 
-	private Rigidbody r;
+	[HideInInspector] public Rigidbody r;
 	private Vector3 currentDest;
 	private float vertical = 0f;
 	private float horizontal = -1f;

@@ -6,15 +6,17 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 	public GameObject jumpTrigger;
 	public float bodyPartTimeOut = 0.5f;
 	public float turningRate;
+	public float loadJumpDelay = 0.5f;
 
 	[HideInInspector] public bool isFPS = false;
 
-	private Rigidbody r;
+	[HideInInspector] public Rigidbody r;
 	private float vertical = 0f;
 	private float horizontal = -1f;
 	private float speed;
 	private float jumpValue;
 	private string directionFacing = "left";
+	private float curTime = 0;
 
 	private SnakeController snakeController;
 
@@ -29,6 +31,7 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 
 	void Update(){
 		getInput ();
+		curTime += Time.deltaTime;
 		//Debug.Log (r.velocity);
 	}
 
@@ -74,7 +77,7 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 			}
 		}
 
-		if (Input.GetButtonDown("Jump") && onGround()){
+		if (Input.GetButtonDown("Jump") && onGround() && curTime > loadJumpDelay){
 			//snakeController.sendJump (transform.position, 0);
 			//Destroy(GameObject.FindGameObjectWithTag("JumpTrigger"));
 //			GameObject temp = Instantiate (jumpTrigger, transform.position, transform.rotation) as GameObject;

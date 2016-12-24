@@ -15,6 +15,8 @@ public class SnakeController : MonoBehaviour {
 	//private SnakeBodyMovement[] snakeBody;
 	private List<SnakeBodyMovement> snakeBody;
 
+	private GameManager gameManager;
+
 	// Use this for initialization
 	void Start () {
 		Physics.IgnoreLayerCollision (8, 8, true);
@@ -40,6 +42,8 @@ public class SnakeController : MonoBehaviour {
 		if (collisionText != null) {
 			collisionText.text = string.Empty;
 		}
+
+		gameManager = GameObject.FindGameObjectWithTag ("MainCamera").GetComponent<GameManager> ();
 	}
 	
 	// Update is called once per frame
@@ -67,9 +71,10 @@ public class SnakeController : MonoBehaviour {
 //		Debug.Log (snakeHead.name);
 		if (other.gameObject.name == snakeHead.name) {
 			//Debug.Log ("You lose! " + other.gameObject.name);
-			if (collisionText != null) {
-				collisionText.text = "Collision Detected!";
-			}
+//			if (collisionText != null) {
+//				collisionText.text = "Collision Detected!";
+//			}
+			gameManager.RestartLevel();
 
 			// DO MORE THINGS HERE NOW THAT WE CAN DETECT COLLISIONS
 		}
@@ -81,5 +86,12 @@ public class SnakeController : MonoBehaviour {
 //		if (indexToSendTo < snakeBody.Length) {
 //			snakeBody [indexToSendTo].jumpLocation = pos;
 //		}
+	}
+
+	public void ResetVelocities(){
+		snakeHead.r.velocity = Vector3.zero;
+		for (int i = 0; i < snakeBody.Count; i++) {
+			snakeBody[i].r.velocity = Vector3.zero;
+		}
 	}
 }
