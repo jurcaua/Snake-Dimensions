@@ -80,7 +80,9 @@ public class SnakeController : MonoBehaviour {
 //			if (collisionText != null) {
 //				collisionText.text = "Collision Detected!";
 //			}
-			gameManager.RestartLevel();
+			if (gameManager != null) {
+				gameManager.RestartLevel ();
+			}
 
 			// DO MORE THINGS HERE NOW THAT WE CAN DETECT COLLISIONS
 		}
@@ -120,5 +122,9 @@ public class SnakeController : MonoBehaviour {
 				snakeBody.Add (nextPartScript);
 			}
 		}
+	}
+
+	public void SpeedUp(float speedUpBy){
+		speed += speedUpBy;
 	}
 }

@@ -13,8 +13,8 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 	[HideInInspector] public Rigidbody r;
 	private float vertical = 0f;
 	private float horizontal = -1f;
-	private float speed;
-	private float jumpValue;
+	//private float speed;
+	//private float jumpValue;
 	private string directionFacing = "left";
 	private float curTime = 0;
 
@@ -25,8 +25,8 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 		r = GetComponent<Rigidbody> ();
 		snakeController = GetComponentInParent<SnakeController> ();
 
-		speed = snakeController.speed;
-		jumpValue = snakeController.jumpValue;
+		//speed = snakeController.speed;
+		//jumpValue = snakeController.jumpValue;
 	}
 
 	void Update(){
@@ -97,6 +97,7 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 	}
 
 	void Move(){
+		float speed = snakeController.speed;
 		r.velocity = new Vector3 (horizontal * speed, r.velocity.y, vertical * speed);
 	}
 
@@ -139,6 +140,8 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 	}
 
 	public void Jump(){
+		float jumpValue = snakeController.jumpValue;
+
 		GameObject temp = Instantiate (jumpTrigger, transform.position, transform.rotation) as GameObject; // cretaing the jump trigger
 		Destroy(temp, snakeController.nBodyParts * bodyPartTimeOut); // destory it after some time according to length of snake
 		r.velocity += new Vector3 (0, jumpValue, 0); // JUMPPP
