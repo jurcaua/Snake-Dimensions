@@ -24,7 +24,7 @@ public class FPSPickUp : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other){
-		if (other.name == "SnakeHead") {
+		if (other.tag == "Head") {
 			main.enabled = false;
 			fps.enabled = true;
 			other.gameObject.GetComponent<SnakeHeadMovement> ().isFPS = true;

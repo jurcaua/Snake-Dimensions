@@ -75,6 +75,11 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 				vertical = pastVert;
 				horizontal = pastHor;
 			}
+
+			if (vertical == -pastVert || horizontal == -pastHor) {
+				vertical = pastVert;
+				horizontal = pastHor;
+			}
 		}
 
 		if (Input.GetButtonDown("Jump") && onGround() && curTime > loadJumpDelay){
@@ -96,7 +101,7 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 	}
 
 	void Rotate(){
-		Quaternion targetRotation;
+		Quaternion targetRotation = Quaternion.identity;
 		if (vertical == 1 && horizontal == 0) { // going up
 			targetRotation = Quaternion.Euler (new Vector3 (0, 0, 0));
 			directionFacing = "up";
@@ -109,8 +114,6 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 		} else if (vertical == 0 && horizontal == -1) { // going left
 			targetRotation = Quaternion.Euler (new Vector3 (0, -90, 0));
 			directionFacing = "left";
-		} else {
-			targetRotation = Quaternion.identity; // wont happen but just in case
 		}
 		transform.rotation = Quaternion.RotateTowards (transform.rotation, targetRotation, turningRate * Time.deltaTime); // smooth rotation
 	}

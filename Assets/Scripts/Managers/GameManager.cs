@@ -12,11 +12,11 @@ public class GameManager : MonoBehaviour {
 
 	private Renderer rend;
 	private SnakeController snakeController;
+	private int lastPickUp = 0;
 
 	// Use this for initialization
 	void Start () {
-		main.enabled = true;
-		fps.enabled = false;
+		ResetCamera ();
 
 		rend = gameArea.GetComponent<Renderer> ();
 
@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour {
 	public void SpawnPickUp() {
 		float randX = 0; // initializing
 		float randZ = 0;
-		int randPickUp = Random.Range (0, pickUps.Length - 1); // random pickup from avaliable pickups
+		int randPickUp = -1; // cant be neagtiev one cause thats lastPickUps' initialized value
 
 		bool found = false; 
 		while (!found) { // get random positions on the game area
@@ -44,6 +44,14 @@ public class GameManager : MonoBehaviour {
 				found = true;
 			}
 		}
+
+		randPickUp = Random.Range (0, pickUps.Length); // random pickup from avaliable pickups
+		while (pickUps[randPickUp].name == pickUps[lastPickUp].name && pickUps[lastPickUp].name == "FPSPickUp") {
+			randPickUp = Random.Range (0, pickUps.Length);
+		}
+
+		lastPickUp = randPickUp;
+		Debug.Log(pickUps[lastPickUp].name);
 		Instantiate (pickUps [randPickUp], new Vector3 (randX, pickUps [randPickUp].transform.position.y, randZ), pickUps [randPickUp].transform.rotation);
 	}
 
@@ -56,5 +64,10 @@ public class GameManager : MonoBehaviour {
 		}
 
 		SceneManager.LoadScene ("Main");
+	}
+
+	public void ResetCamera(){
+		main.enabled = true;
+		fps.enabled = false;
 	}
 }

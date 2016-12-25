@@ -22,6 +22,8 @@ public class SnakeBodyMovement : MonoBehaviour {
 
 		speed = snakeController.speed;
 		jumpValue = snakeController.jumpValue;
+
+		Debug.Log (bodyNum);
 	}
 
 	// Update is called once per frame
