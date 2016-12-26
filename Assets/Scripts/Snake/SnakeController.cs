@@ -64,10 +64,10 @@ public class SnakeController : MonoBehaviour {
 	void AlertBodyParts(){
 		if (snakeBody.Count > 0) {
 			snakeBody [0].setDestination (snakeHead.getPosition ());
-//		snakeBody[0].setMovement(snakeHead.getHorizontal(), snakeHead.getVertical());
+//			snakeBody [0].setDestination (snakeHead.r);
 			for (int i = 1; i < snakeBody.Count; i++) {
 				snakeBody [i].setDestination (snakeBody [i - 1].getPosition ());
-//			snakeBody[i].setMovement(snakeBody[i-1].getHorizontal(), snakeBody[i-1].getVertical());
+//				snakeBody [i].setDestination (snakeBody [i - 1].r);
 			}
 		}
 	}
@@ -76,6 +76,7 @@ public class SnakeController : MonoBehaviour {
 //		Debug.Log (other.gameObject.name);
 //		Debug.Log (snakeHead.name);
 		if (other.gameObject.name == snakeHead.name) {
+			Debug.Break ();
 			//Debug.Log ("You lose! " + other.gameObject.name);
 //			if (collisionText != null) {
 //				collisionText.text = "Collision Detected!";
@@ -106,18 +107,27 @@ public class SnakeController : MonoBehaviour {
 	public void addBodyPart(int toAdd){
 		if (snakeBody.Count == 0) { // adding when we didnt have any body parts to beginning with
 			nBodyParts = 1;
-			GameObject nextPart = Instantiate (snakeBodyPart, snakeHead.transform.position - snakeHead.transform.forward, snakeHead.transform.rotation, snake.transform) as GameObject;
+			GameObject nextPart = Instantiate (snakeBodyPart, snakeHead.transform.position - (snakeHead.transform.forward * snakeHead.transform.localScale.x), snakeHead.transform.rotation, snake.transform) as GameObject;
 			SnakeBodyMovement nextPartScript = nextPart.GetComponent<SnakeBodyMovement> ();
+			nextPartScript.directionFacing = snakeHead.directionFacing;
 			nextPartScript.bodyNum = nBodyParts - 1;
 			snakeBody.Add (nextPartScript);
-
-			addBodyPart (toAdd - 1);
+			for (int i = 0; i < toAdd - 1; i++) {
+				nBodyParts++; // since we're adding a part
+				SnakeBodyMovement lastPart = snakeBody [snakeBody.Count - 1];
+				nextPart = Instantiate (snakeBodyPart, lastPart.transform.position - (lastPart.transform.forward * lastPart.transform.localScale.x), lastPart.transform.rotation, snake.transform) as GameObject;
+				nextPartScript = nextPart.GetComponent<SnakeBodyMovement> ();
+				nextPartScript.directionFacing = lastPart.directionFacing;
+				nextPartScript.bodyNum = nBodyParts - 1;
+				snakeBody.Add (nextPartScript);
+			}
 		} else { // adding when we already have one
 			for (int i = 0; i < toAdd; i++) {
 				nBodyParts++; // since we're adding a part
 				SnakeBodyMovement lastPart = snakeBody [snakeBody.Count - 1];
 				GameObject nextPart = Instantiate (snakeBodyPart, lastPart.transform.position, lastPart.transform.rotation, snake.transform) as GameObject;
 				SnakeBodyMovement nextPartScript = nextPart.GetComponent<SnakeBodyMovement> ();
+				nextPartScript.directionFacing = lastPart.directionFacing;
 				nextPartScript.bodyNum = nBodyParts - 1;
 				snakeBody.Add (nextPartScript);
 			}
@@ -126,5 +136,15 @@ public class SnakeController : MonoBehaviour {
 
 	public void SpeedUp(float speedUpBy){
 		speed += speedUpBy;
+	}
+
+	public void ScaleUp(float scaleUpBy){
+		snakeHead.transform.localScale += new Vector3 (scaleUpBy, scaleUpBy, scaleUpBy);
+		snakeHead.transform.Translate (new Vector3 (0, scaleUpBy / 2, 0));
+		for (int i = 0; i < snakeBody.Count; i++) {
+			snakeBody[i].transform.localScale += new Vector3 (scaleUpBy, scaleUpBy, scaleUpBy);
+			snakeBody[i].transform.Translate (new Vector3 (0, scaleUpBy / 2, 0));
+			//snakeBody [i].collider.radius /= 8;
+		}
 	}
 }

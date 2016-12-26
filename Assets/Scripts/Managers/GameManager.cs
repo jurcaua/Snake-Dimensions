@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour {
 		}
 
 		lastPickUp = randPickUp;
-		Debug.Log(pickUps[lastPickUp].name);
+		//Debug.Log(pickUps[lastPickUp].name);
 		Instantiate (pickUps [randPickUp], new Vector3 (randX, pickUps [randPickUp].transform.position.y, randZ), pickUps [randPickUp].transform.rotation);
 	}
 

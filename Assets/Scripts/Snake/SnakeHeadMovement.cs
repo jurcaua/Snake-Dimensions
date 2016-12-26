@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 
@@ -15,7 +16,7 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 	private float horizontal = -1f;
 	//private float speed;
 	//private float jumpValue;
-	private string directionFacing = "left";
+	[HideInInspector] public string directionFacing = "left";
 	private float curTime = 0;
 
 	private SnakeController snakeController;
@@ -92,7 +93,8 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 		}
 
 		if (Input.GetKeyDown ("r")) {
-			snakeController.collisionText.text = string.Empty;
+			//snakeController.collisionText.text = string.Empty;
+			SceneManager.LoadScene ("Main");
 		}
 	}
 
@@ -120,7 +122,7 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 	}
 
 	public Vector3 getPosition(){
-		return transform.position;
+		return transform.position - transform.forward * transform.localScale.x/3;
 	}
 
 	public float getHorizontal(){

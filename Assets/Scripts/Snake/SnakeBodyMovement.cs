@@ -8,17 +8,24 @@ public class SnakeBodyMovement : MonoBehaviour {
 
 	[HideInInspector] public Rigidbody r;
 	private Vector3 currentDest;
+	//private Rigidbody currentDest;
 	private float vertical = 0f;
 	private float horizontal = -1f;
 	//private float speed;
 	//private float jumpValue;
+	[HideInInspector] public string directionFacing = "left";
 
+	private GameObject snake;
 	private SnakeController snakeController;
+	[HideInInspector] public SphereCollider collider;
 
 	// Use this for initialization
 	void Start () {
 		r = GetComponent<Rigidbody> ();
 		snakeController = GetComponentInParent<SnakeController> ();
+		collider = GetComponent<SphereCollider> ();
+
+		snake = GameObject.FindGameObjectWithTag ("Snake");
 
 		//speed = snakeController.speed;
 		//jumpValue = snakeController.jumpValue;
@@ -33,9 +40,11 @@ public class SnakeBodyMovement : MonoBehaviour {
 
 	void FixedUpdate(){
 		Move ();
+		Rotate ();
 	}
 
 	public void setDestination(Vector3 dest){
+	//public void setDestination(Rigidbody dest){
 		currentDest = dest;
 		setMovement ();
 	}
@@ -47,6 +56,12 @@ public class SnakeBodyMovement : MonoBehaviour {
 	public void setMovement(){
 		vertical = Mathf.Clamp(currentDest.z - transform.position.z, -1f, 1f); // either gonna be -1 or 1 or 0 and same below
 		horizontal = Mathf.Clamp(currentDest.x - transform.position.x, -1f, 1f);
+
+//		float posZ = currentDest.position.z - Mathf.Clamp (currentDest.velocity.z, -1f, 1f);
+//		float posX = currentDest.position.x - Mathf.Clamp (currentDest.velocity.x, -1f, 1f);
+//
+//		vertical = Mathf.Clamp(posZ - transform.position.z, -1f, 1f);
+//		horizontal = Mathf.Clamp(posX - transform.position.x, -1f, 1f);
 
 //		horizontal = hor;
 //		vertical = vert;
@@ -60,6 +75,24 @@ public class SnakeBodyMovement : MonoBehaviour {
 		float speed = snakeController.speed;
 
 		r.velocity = new Vector3 (horizontal * speed, r.velocity.y, vertical * speed);
+	}
+
+	void Rotate(){
+		Quaternion targetRotation = Quaternion.identity;
+		if (vertical == 1 && horizontal == 0) { // going up
+			targetRotation = Quaternion.Euler (new Vector3 (0, 0, 0));
+			directionFacing = "up";
+		} else if (vertical == -1 && horizontal == 0) { // going down
+			targetRotation = Quaternion.Euler (new Vector3 (0, 180, 0));
+			directionFacing = "down";
+		} else if (vertical == 0 && horizontal == 1) { // going right
+			targetRotation = Quaternion.Euler (new Vector3 (0, 90, 0));
+			directionFacing = "right";
+		} else if (vertical == 0 && horizontal == -1) { // going left
+			targetRotation = Quaternion.Euler (new Vector3 (0, -90, 0));
+			directionFacing = "left";
+		}
+		transform.rotation = targetRotation; // smooth rotation
 	}
 
 	public float getHorizontal(){
