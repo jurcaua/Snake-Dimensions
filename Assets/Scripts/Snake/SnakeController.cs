@@ -7,6 +7,7 @@ public class SnakeController : MonoBehaviour {
 
 	public float speed = 5f;
 	public float jumpValue = 6f;
+	public float snakeColliderRadius = 0.4f;
 	[HideInInspector] public int nBodyParts;
 
 	public Text collisionText;
@@ -138,13 +139,15 @@ public class SnakeController : MonoBehaviour {
 		speed += speedUpBy;
 	}
 
+	// NOT USED CAUSE ITS BUGGY BUT THE FUNCTIONALITY IS HERE IF I EVER WANA WORK ON IT
 	public void ScaleUp(float scaleUpBy){
 		snakeHead.transform.localScale += new Vector3 (scaleUpBy, scaleUpBy, scaleUpBy);
-		snakeHead.transform.Translate (new Vector3 (0, scaleUpBy / 2, 0));
+		snakeHead.transform.Translate (new Vector3 (0, snakeColliderRadius / snakeHead.transform.localScale.x, 0));
+		snakeHead.collider.radius = snakeColliderRadius / snakeHead.transform.localScale.x;
 		for (int i = 0; i < snakeBody.Count; i++) {
 			snakeBody[i].transform.localScale += new Vector3 (scaleUpBy, scaleUpBy, scaleUpBy);
-			snakeBody[i].transform.Translate (new Vector3 (0, scaleUpBy / 2, 0));
-			//snakeBody [i].collider.radius /= 8;
+			snakeBody[i].transform.Translate (new Vector3 (0, snakeColliderRadius / snakeBody [i].transform.localScale.x, 0));
+			snakeBody [i].collider.radius = snakeColliderRadius / snakeBody [i].transform.localScale.x;
 		}
 	}
 }
