@@ -14,6 +14,7 @@ public class SnakeBodyMovement : MonoBehaviour {
 	//private float speed;
 	//private float jumpValue;
 	[HideInInspector] public string directionFacing = "left";
+	private bool Paused = false;
 
 	//private GameObject snake;
 	private SnakeController snakeController;
@@ -122,6 +123,16 @@ public class SnakeBodyMovement : MonoBehaviour {
 //		}
 		if (bodyNum != 0 && bodyNum != 1) {
 			snakeController.checkCollision (other);
+		}
+	}
+
+	public void Pause(){
+		if (!Paused) {
+			Paused = true;
+			Time.timeScale = 0;
+		} else {
+			Paused = false;
+			Time.timeScale = 1;
 		}
 	}
 }
