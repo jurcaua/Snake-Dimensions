@@ -143,11 +143,11 @@ public class SnakeController : MonoBehaviour {
 	public void ScaleUp(float scaleUpBy){
 		snakeHead.transform.localScale += new Vector3 (scaleUpBy, scaleUpBy, scaleUpBy);
 		snakeHead.transform.Translate (new Vector3 (0, snakeColliderRadius / snakeHead.transform.localScale.x, 0));
-		snakeHead.collider.radius = snakeColliderRadius / snakeHead.transform.localScale.x;
+		//snakeHead.collider.radius = snakeColliderRadius / snakeHead.transform.localScale.x;
 		for (int i = 0; i < snakeBody.Count; i++) {
 			snakeBody[i].transform.localScale += new Vector3 (scaleUpBy, scaleUpBy, scaleUpBy);
 			snakeBody[i].transform.Translate (new Vector3 (0, snakeColliderRadius / snakeBody [i].transform.localScale.x, 0));
-			snakeBody [i].collider.radius = snakeColliderRadius / snakeBody [i].transform.localScale.x;
+			//snakeBody [i].collider.radius = snakeColliderRadius / snakeBody [i].transform.localScale.x;
 		}
 	}
 }

@@ -1,6 +1,7 @@
-﻿using UnityEngine;
 using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
@@ -8,11 +9,13 @@ public class GameManager : MonoBehaviour {
 	public Camera fps;
 	public GameObject gameArea;
 	public float spawnPadding;
+	public Text scoreText;
 	public GameObject[] pickUps;
 
 	private Renderer rend;
 	private SnakeController snakeController;
 	private int lastPickUp = 0;
+	private int score = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -23,11 +26,13 @@ public class GameManager : MonoBehaviour {
 		snakeController = GameObject.FindGameObjectWithTag ("Snake").GetComponent<SnakeController> ();
 
 		SpawnPickUp ();
+
+		scoreText.text = "0";
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-	
+
 	}
 
 	public void SpawnPickUp() {
@@ -69,5 +74,10 @@ public class GameManager : MonoBehaviour {
 	public void ResetCamera(){
 		main.enabled = true;
 		fps.enabled = false;
+	}
+
+	public void addScore(int toAdd){
+		score += toAdd;
+		scoreText.text = score.ToString();
 	}
 }

@@ -4,6 +4,7 @@ using System.Collections;
 public class SpeedUpPickUp : MonoBehaviour {
 
 	public float speedUpBy = 1f;
+	public int scoreValue;
 
 	private GameManager gameManager;
 	private SnakeController snakeController;
@@ -23,6 +24,8 @@ public class SpeedUpPickUp : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other){
 		if (other.tag == "Head") {
+			gameManager.addScore (scoreValue);
+
 			gameManager.ResetCamera (); // if we were in fps mode, we exit
 			snakeHead.isFPS = false;
 

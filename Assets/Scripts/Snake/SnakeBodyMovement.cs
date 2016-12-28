@@ -15,17 +15,17 @@ public class SnakeBodyMovement : MonoBehaviour {
 	//private float jumpValue;
 	[HideInInspector] public string directionFacing = "left";
 
-	private GameObject snake;
+	//private GameObject snake;
 	private SnakeController snakeController;
-	[HideInInspector] public SphereCollider collider;
+	//[HideInInspector] public SphereCollider collider;
 
 	// Use this for initialization
 	void Start () {
 		r = GetComponent<Rigidbody> ();
 		snakeController = GetComponentInParent<SnakeController> ();
-		collider = GetComponent<SphereCollider> ();
+		//collider = GetComponent<SphereCollider> ();
 
-		snake = GameObject.FindGameObjectWithTag ("Snake");
+		//snake = GameObject.FindGameObjectWithTag ("Snake");
 
 		//speed = snakeController.speed;
 		//jumpValue = snakeController.jumpValue;

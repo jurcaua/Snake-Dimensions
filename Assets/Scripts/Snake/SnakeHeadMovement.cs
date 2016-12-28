@@ -19,7 +19,7 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 	[HideInInspector] public string directionFacing = "left";
 	private float curTime = 0;
 
-	[HideInInspector] public SphereCollider collider;
+	//[HideInInspector] public SphereCollider collider;
 
 	private SnakeController snakeController;
 
@@ -28,7 +28,7 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 		r = GetComponent<Rigidbody> ();
 		snakeController = GetComponentInParent<SnakeController> ();
 
-		collider = GetComponent<SphereCollider> ();
+		//collider = GetComponent<SphereCollider> ();
 
 		//speed = snakeController.speed;
 		//jumpValue = snakeController.jumpValue;

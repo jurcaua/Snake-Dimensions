@@ -3,6 +3,8 @@ using System.Collections;
 
 public class FPSPickUp : MonoBehaviour {
 
+	public int scoreValue;
+
 	private Camera main;
 	private Camera fps;
 	private GameManager gameManager;
@@ -25,9 +27,13 @@ public class FPSPickUp : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other){
 		if (other.tag == "Head") {
+			gameManager.addScore (scoreValue);
+
 			main.enabled = false;
 			fps.enabled = true;
+
 			other.gameObject.GetComponent<SnakeHeadMovement> ().isFPS = true;
+
 			Destroy (gameObject);
 			gameManager.SpawnPickUp ();
 		}
