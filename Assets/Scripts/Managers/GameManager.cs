@@ -1,7 +1,12 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
+using System;
+using System.IO;
+using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public class GameManager : MonoBehaviour {
 
@@ -19,35 +24,74 @@ public class GameManager : MonoBehaviour {
 	public Image pausePlayImage;
 	public Sprite pauseSprite;
 	public Sprite playSprite;
+	[Space(5)]
+	public GameObject highscoresPanel;
+	public Text[] scoreTexts;
+	public Animator continueFlasher;
+	public float timeBeforeRestart;
+
+	[Header("Music")]
+	public BackgroundMusic[] backgroundMusic;
+	public Text credsText;
 
 	[Space(10)]
 
 	public GameObject[] pickUps;
 
 	private Renderer rend;
-	private SnakeController snakeController;
+	//private SnakeController snakeController;
+	private AudioSource audioSource;
 	private int lastPickUp = 0;
 	private int score = 0;
 	private bool Paused = false;
+	private bool GameOver = false;
+	private List<int> highscores;
+	private int maxHighscores = 5;
+	private string highscorePath;
+	private bool gotHighscore = false;
+	private int highscoreIndex;
+	private float currentTime = 0f;
+
+	void Awake(){
+		highscorePath = Application.persistentDataPath + "/highscores.dat";
+
+		Load ();
+	}
+
+	void OnApplicationQuit(){
+		Save ();
+	}
 
 	// Use this for initialization
 	void Start () {
+		Time.timeScale = 1;
+
 		ResetCamera ();
 
 		rend = gameArea.GetComponent<Renderer> ();
+		audioSource = GetComponent<AudioSource> ();
 
-		snakeController = GameObject.FindGameObjectWithTag ("Snake").GetComponent<SnakeController> ();
+		//snakeController = GameObject.FindGameObjectWithTag ("Snake").GetComponent<SnakeController> ();
 
 		SpawnPickUp ();
 
 		scoreText.text = "0";
 
 		pausePlayImage.sprite = pauseSprite;
+
+		highscoresPanel.SetActive(false);
+
+		playSong ();
 	}
 
 	// Update is called once per frame
 	void Update () {
-
+		if (GameOver) {
+			Debug.Log (Time.fixedTime);
+			if (Time.realtimeSinceStartup > currentTime + timeBeforeRestart && Input.anyKey) {
+				SceneManager.LoadScene ("Main");
+			}
+		}
 	}
 
 	public void SpawnPickUp() {
@@ -57,17 +101,17 @@ public class GameManager : MonoBehaviour {
 
 		bool found = false; 
 		while (!found) { // get random positions on the game area
-			randX = Random.Range ((gameArea.transform.position.x - rend.bounds.size.x / 2) + spawnPadding, (gameArea.transform.position.x + rend.bounds.size.x / 2) - spawnPadding);
-			randZ = Random.Range ((gameArea.transform.position.z - rend.bounds.size.z / 2) + spawnPadding, (gameArea.transform.position.z + rend.bounds.size.z / 2) - spawnPadding);
+			randX = UnityEngine.Random.Range ((gameArea.transform.position.x - rend.bounds.size.x / 2) + spawnPadding, (gameArea.transform.position.x + rend.bounds.size.x / 2) - spawnPadding);
+			randZ = UnityEngine.Random.Range ((gameArea.transform.position.z - rend.bounds.size.z / 2) + spawnPadding, (gameArea.transform.position.z + rend.bounds.size.z / 2) - spawnPadding);
 
 			if (!Physics.Raycast (new Vector3 (randX, 1f, randZ), Vector3.down, 1f, 9)) { // check if theres anything where we are spawning the pickup
 				found = true;
 			}
 		}
 
-		randPickUp = Random.Range (0, pickUps.Length); // random pickup from avaliable pickups
+		randPickUp = UnityEngine.Random.Range (0, pickUps.Length); // random pickup from avaliable pickups
 		while (pickUps[randPickUp].name == pickUps[lastPickUp].name && pickUps[lastPickUp].name == "FPSPickUp") {
-			randPickUp = Random.Range (0, pickUps.Length);
+			randPickUp = UnityEngine.Random.Range (0, pickUps.Length);
 		}
 
 		lastPickUp = randPickUp;
@@ -76,14 +120,58 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void RestartLevel(){
-		snakeController.ResetVelocities ();
+//		snakeController.ResetVelocities ();
 
-		GameObject[] jumpTriggers = GameObject.FindGameObjectsWithTag("JumpTrigger");
-		for (int i = 0; i < jumpTriggers.Length; i++) {
-			Destroy (jumpTriggers [i]);
+//		GameObject[] jumpTriggers = GameObject.FindGameObjectsWithTag("JumpTrigger");
+//		for (int i = 0; i < jumpTriggers.Length; i++) {
+//			Destroy (jumpTriggers [i]);
+//		}
+
+		Time.timeScale = 0;
+
+		// update the score in the system
+		UpdateHighscores ();
+
+		// update the text values
+		UpdateHighscoreText();
+
+		// turn on this shit
+		highscoresPanel.SetActive (true);
+		continueFlasher.Play ("PressToContinueClip");
+
+		GameOver = true;
+		currentTime = Time.realtimeSinceStartup;
+	}
+
+	void UpdateHighscores(){
+		if (highscores.Count == 0) {
+			highscores.Add (score);
+		} else {
+			for (int i = 0; i < highscores.Count; i++) {
+				if (score > highscores [i]) {
+					highscores.Insert (i, score);
+					gotHighscore = true;
+					highscoreIndex = i;
+					break;
+				}
+			}
+
+			if (highscores.Count > maxHighscores) {
+				for (int i = highscores.Count - 1; i > maxHighscores - 1; i--) {
+					highscores.RemoveAt (i);
+				}
+			}
+		}
+	}
+
+	void UpdateHighscoreText(){
+		for (int i = 0; i < highscores.Count; i++) {
+			scoreTexts [i].text = highscores [i].ToString();
 		}
 
-		SceneManager.LoadScene ("Main");
+		if (gotHighscore) {
+			scoreTexts[highscoreIndex].text += " NEW HIGHSCORE!";
+		}
 	}
 
 	public void ResetCamera(){
@@ -108,4 +196,43 @@ public class GameManager : MonoBehaviour {
 			Time.timeScale = 1;
 		}
 	}
+
+	public void Save(){
+		BinaryFormatter bf = new BinaryFormatter ();
+		FileStream file = File.Create (highscorePath);
+
+		Highscores scores = new Highscores ();
+		scores.highscores = highscores;
+
+		bf.Serialize (file, scores);
+		file.Close ();
+	}
+
+	public void Load(){
+		if (File.Exists (highscorePath)) {
+			BinaryFormatter bf = new BinaryFormatter ();
+			FileStream file = File.Open (highscorePath, FileMode.Open);
+			Highscores scores = (Highscores)bf.Deserialize (file);
+			file.Close ();
+
+			highscores = scores.highscores;
+		} 
+		if (highscores == null) {
+			highscores = new List<int>();
+		}
+	}
+
+	void playSong(){
+		int rand = UnityEngine.Random.Range (0, backgroundMusic.Length);
+		audioSource.clip = backgroundMusic [rand].music;
+		credsText.text = "Music Playing Credits: " + backgroundMusic [rand].credits;
+
+		audioSource.Play ();
+	}
+}
+
+[Serializable]
+public struct BackgroundMusic{
+	public string credits;
+	public AudioClip music;
 }

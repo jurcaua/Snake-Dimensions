@@ -10,6 +10,8 @@ public class SnakeController : MonoBehaviour {
 	public float snakeColliderRadius = 0.4f;
 	[HideInInspector] public int nBodyParts;
 
+	public bool isMain;
+
 	public Text collisionText;
 	public GameObject snakeBodyPart;
 
@@ -76,7 +78,7 @@ public class SnakeController : MonoBehaviour {
 	public void checkCollision(Collider other){
 //		Debug.Log (other.gameObject.name);
 //		Debug.Log (snakeHead.name);
-		if (other.gameObject.name == snakeHead.name) {
+		if (other.gameObject.name == snakeHead.name && isMain) {
 			Debug.Break ();
 			//Debug.Log ("You lose! " + other.gameObject.name);
 //			if (collisionText != null) {
@@ -122,6 +124,7 @@ public class SnakeController : MonoBehaviour {
 				nextPartScript.bodyNum = nBodyParts - 1;
 				snakeBody.Add (nextPartScript);
 			}
+			addBodyPart (toAdd - 2);
 		} else { // adding when we already have one
 			for (int i = 0; i < toAdd; i++) {
 				nBodyParts++; // since we're adding a part
