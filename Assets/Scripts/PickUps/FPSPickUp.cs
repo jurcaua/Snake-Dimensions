@@ -28,6 +28,7 @@ public class FPSPickUp : MonoBehaviour {
 	void OnTriggerEnter(Collider other){
 		if (other.tag == "Head") {
 			gameManager.addScore (scoreValue);
+			gameManager.collectSound.Play ();
 
 			main.enabled = false;
 			fps.enabled = true;

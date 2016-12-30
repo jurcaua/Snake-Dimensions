@@ -35,6 +35,8 @@ public class FatUpPickUp : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other){
 		if (other.tag == "Head") {
+			gameManager.collectSound.Play ();
+
 			main.enabled = true;
 			fps.enabled = false;
 

@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour {
 
 	[Space(10)]
 
+	public AudioSource collectSound;
 	public GameObject[] pickUps;
 
 	private Renderer rend;
@@ -79,7 +80,7 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (GameOver) {
-			Debug.Log (Time.fixedTime);
+			//Debug.Log (Time.fixedTime);
 			if (Time.realtimeSinceStartup > currentTime + timeBeforeRestart && Input.anyKey) {
 				SceneManager.LoadScene ("Main");
 			}

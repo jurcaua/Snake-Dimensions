@@ -9,6 +9,8 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 	public float turningRate;
 	public float loadJumpDelay = 0.5f;
 
+	public AudioSource jumpSound;
+
 	[HideInInspector] public bool isFPS = false;
 
 	[HideInInspector] public Rigidbody r;
@@ -144,13 +146,15 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 	}
 
 	bool onGround(){
-		return Physics.Raycast (transform.position, Vector3.down, transform.lossyScale.x / 2 + 0.1f); // check if its touching the floor
+		return Physics.Raycast (transform.position, Vector3.down, transform.lossyScale.x / 2 + 0.01f); // check if its touching the floor
 	}
 
 	public void Jump(){
 		float jumpValue = snakeController.jumpValue;
 
-		GameObject temp = Instantiate (jumpTrigger, transform.position, transform.rotation) as GameObject; // cretaing the jump trigger
+		jumpSound.Play ();
+
+		GameObject temp = Instantiate (jumpTrigger, transform.position, transform.rotation) as GameObject; // creating the jump trigger
 		Destroy(temp, snakeController.nBodyParts * bodyPartTimeOut); // destory it after some time according to length of snake
 		r.velocity += new Vector3 (0, jumpValue, 0); // JUMPPP
 	}
