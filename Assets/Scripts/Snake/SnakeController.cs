@@ -12,7 +12,6 @@ public class SnakeController : MonoBehaviour {
 
 	public bool isMain;
 
-	public Text collisionText;
 	public GameObject snakeBodyPart;
 
 	private GameObject snake;
@@ -43,10 +42,6 @@ public class SnakeController : MonoBehaviour {
 		//nBodyParts = snakeBody.Length;
 		nBodyParts = snakeBody.Count;
 		//Debug.Log (snakeBody.Count);
-
-		if (collisionText != null) {
-			collisionText.text = string.Empty;
-		}
 
 		gameManager = GameObject.FindGameObjectWithTag ("MainCamera").GetComponent<GameManager> ();
 
@@ -79,7 +74,7 @@ public class SnakeController : MonoBehaviour {
 //		Debug.Log (other.gameObject.name);
 //		Debug.Log (snakeHead.name);
 		if (other.gameObject.name == snakeHead.name && isMain) {
-			Debug.Break ();
+			//Debug.Break ();
 			//Debug.Log ("You lose! " + other.gameObject.name);
 //			if (collisionText != null) {
 //				collisionText.text = "Collision Detected!";

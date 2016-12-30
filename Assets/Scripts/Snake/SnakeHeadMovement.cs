@@ -46,7 +46,7 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 	}
 
 	void getInput(){
-		if (Input.anyKeyDown) {
+		if (Input.anyKeyDown && snakeController.isMain) {
 			float pastVert = vertical;
 			float pastHor = horizontal;
 
@@ -85,21 +85,23 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 				vertical = pastVert;
 				horizontal = pastHor;
 			}
+
+			if (Input.GetButtonDown("Jump") && onGround() && curTime > loadJumpDelay){
+				//snakeController.sendJump (transform.position, 0);
+				//Destroy(GameObject.FindGameObjectWithTag("JumpTrigger"));
+				//			GameObject temp = Instantiate (jumpTrigger, transform.position, transform.rotation) as GameObject;
+				//			Destroy(temp, snakeController.nBodyParts * bodyPartTimeOut);
+				Jump ();
+				//r.AddForce (transform.up * jumpValue, ForceMode.Impulse);
+			}
 		}
 
-		if (Input.GetButtonDown("Jump") && onGround() && curTime > loadJumpDelay){
-			//snakeController.sendJump (transform.position, 0);
-			//Destroy(GameObject.FindGameObjectWithTag("JumpTrigger"));
-//			GameObject temp = Instantiate (jumpTrigger, transform.position, transform.rotation) as GameObject;
-//			Destroy(temp, snakeController.nBodyParts * bodyPartTimeOut);
-			Jump ();
-			//r.AddForce (transform.up * jumpValue, ForceMode.Impulse);
-		}
 
-		if (Input.GetKeyDown ("r")) {
-			//snakeController.collisionText.text = string.Empty;
-			SceneManager.LoadScene ("Main");
-		}
+
+//		if (Input.GetKeyDown ("r")) {
+//			//snakeController.collisionText.text = string.Empty;
+//			SceneManager.LoadScene ("Main");
+//		}
 	}
 
 	void Move(){

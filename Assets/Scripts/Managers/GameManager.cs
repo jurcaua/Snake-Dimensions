@@ -30,17 +30,12 @@ public class GameManager : MonoBehaviour {
 	public Animator continueFlasher;
 	public float timeBeforeRestart;
 
-	[Header("Music")]
-	public BackgroundMusic[] backgroundMusic;
-	public Text credsText;
-
 	[Space(10)]
 
 	public GameObject[] pickUps;
 
 	private Renderer rend;
 	//private SnakeController snakeController;
-	private AudioSource audioSource;
 	private int lastPickUp = 0;
 	private int score = 0;
 	private bool Paused = false;
@@ -59,7 +54,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void OnApplicationQuit(){
-		Save ();
+		//Save ();
 	}
 
 	// Use this for initialization
@@ -69,7 +64,6 @@ public class GameManager : MonoBehaviour {
 		ResetCamera ();
 
 		rend = gameArea.GetComponent<Renderer> ();
-		audioSource = GetComponent<AudioSource> ();
 
 		//snakeController = GameObject.FindGameObjectWithTag ("Snake").GetComponent<SnakeController> ();
 
@@ -80,8 +74,6 @@ public class GameManager : MonoBehaviour {
 		pausePlayImage.sprite = pauseSprite;
 
 		highscoresPanel.SetActive(false);
-
-		playSong ();
 	}
 
 	// Update is called once per frame
@@ -162,6 +154,8 @@ public class GameManager : MonoBehaviour {
 				}
 			}
 		}
+
+		Save ();
 	}
 
 	void UpdateHighscoreText(){
@@ -221,18 +215,4 @@ public class GameManager : MonoBehaviour {
 			highscores = new List<int>();
 		}
 	}
-
-	void playSong(){
-		int rand = UnityEngine.Random.Range (0, backgroundMusic.Length);
-		audioSource.clip = backgroundMusic [rand].music;
-		credsText.text = "Music Playing Credits: " + backgroundMusic [rand].credits;
-
-		audioSource.Play ();
-	}
-}
-
-[Serializable]
-public struct BackgroundMusic{
-	public string credits;
-	public AudioClip music;
 }
