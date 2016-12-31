@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Rendering;
 using System.Collections;
 
 public class FPSPickUp : MonoBehaviour {
@@ -9,6 +10,8 @@ public class FPSPickUp : MonoBehaviour {
 	private Camera fps;
 	private GameManager gameManager;
 
+	private SpriteRenderer sprite;
+
 	// Use this for initialization
 	void Start () {
 		GameObject fpsCamera = GameObject.FindGameObjectWithTag ("FPSCamera");
@@ -17,6 +20,10 @@ public class FPSPickUp : MonoBehaviour {
 		main = mainCamera.GetComponent<Camera> ();
 		fps = fpsCamera.GetComponent<Camera> ();
 		gameManager = mainCamera.GetComponent<GameManager> ();
+
+		sprite = GetComponent<SpriteRenderer> ();
+		sprite.receiveShadows = true;
+		sprite.shadowCastingMode = ShadowCastingMode.On;
 
 	}
 	
@@ -32,7 +39,6 @@ public class FPSPickUp : MonoBehaviour {
 
 			main.enabled = false;
 			fps.enabled = true;
-
 			other.gameObject.GetComponent<SnakeHeadMovement> ().isFPS = true;
 
 			Destroy (gameObject);

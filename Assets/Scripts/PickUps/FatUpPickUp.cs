@@ -11,20 +11,12 @@ public class FatUpPickUp : MonoBehaviour {
 	private SnakeController snakeController;
 
 	private GameObject snake;
-	private SnakeHeadMovement snakeHead;
 
 	// Use this for initialization
 	void Start () {
 		snake = GameObject.FindGameObjectWithTag ("Snake");
-		snakeHead = GameObject.FindGameObjectWithTag ("Head").GetComponent<SnakeHeadMovement> ();;
 
-		GameObject fpsCamera = GameObject.FindGameObjectWithTag ("FPSCamera");
-		GameObject mainCamera = GameObject.FindGameObjectWithTag ("MainCamera");
-
-		main = mainCamera.GetComponent<Camera> ();
-		fps = fpsCamera.GetComponent<Camera> ();
-
-		gameManager = mainCamera.GetComponent<GameManager> ();
+		gameManager = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<GameManager> ();
 		snakeController = snake.GetComponent<SnakeController> ();
 	}
 	
@@ -37,10 +29,7 @@ public class FatUpPickUp : MonoBehaviour {
 		if (other.tag == "Head") {
 			gameManager.collectSound.Play ();
 
-			main.enabled = true;
-			fps.enabled = false;
-
-			snakeHead.isFPS = false;
+			gameManager.ResetCamera ();
 
 			//snake.transform.localScale += new Vector3(fatUpValue, fatUpValue, fatUpValue);
 			snakeController.ScaleUp(fatUpValue);

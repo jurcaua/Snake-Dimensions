@@ -19,15 +19,16 @@ public class ControlsMenu : MonoBehaviour {
 	}
 	
 	public void Next(){
-		if (nextText.text == "Play") {
-			SceneManager.LoadScene ("Main");
+		if (nextText.text == "Start Menu") {
+			SceneManager.LoadScene ("StartMenu");
 		} else {
 			currentPanel++;
 			if (currentPanel < controlPanels.Length) {
 				controlPanels [currentPanel - 1].SetActive (false);
 				controlPanels [currentPanel].SetActive (true);
-			} else {
-				nextText.text = "Play";
+			}
+			if (currentPanel == controlPanels.Length - 1){
+				nextText.text = "Start Menu";
 			}
 		}
 	}

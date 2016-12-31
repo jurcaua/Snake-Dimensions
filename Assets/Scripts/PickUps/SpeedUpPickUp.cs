@@ -8,13 +8,11 @@ public class SpeedUpPickUp : MonoBehaviour {
 
 	private GameManager gameManager;
 	private SnakeController snakeController;
-	private SnakeHeadMovement snakeHead;
 
 	// Use this for initialization
 	void Start () {
 		gameManager = GameObject.FindGameObjectWithTag ("MainCamera").GetComponent<GameManager> ();
 		snakeController = GameObject.FindGameObjectWithTag ("Snake").GetComponent<SnakeController> ();
-		snakeHead = GameObject.FindGameObjectWithTag ("Head").GetComponent<SnakeHeadMovement> ();
 	}
 	
 	// Update is called once per frame
@@ -28,7 +26,6 @@ public class SpeedUpPickUp : MonoBehaviour {
 			gameManager.collectSound.Play ();
 
 			gameManager.ResetCamera (); // if we were in fps mode, we exit
-			snakeHead.isFPS = false;
 
 			snakeController.SpeedUp (speedUpBy);
 

@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour {
 	public Image pausePlayImage;
 	public Sprite pauseSprite;
 	public Sprite playSprite;
+	public GameObject mainMenuButton;
 	[Space(5)]
 	public GameObject highscoresPanel;
 	public Text[] scoreTexts;
@@ -34,10 +35,13 @@ public class GameManager : MonoBehaviour {
 	[Space(10)]
 
 	public AudioSource collectSound;
+	public GameObject fallingCube;
+	public int spawnCubeRate = 2;
 	public GameObject[] pickUps;
 
 	private Renderer rend;
 	//private SnakeController snakeController;
+	private SnakeHeadMovement snakeHead;
 	private int lastPickUp = 0;
 	private int score = 0;
 	[HideInInspector] public bool Paused = false;
@@ -48,11 +52,14 @@ public class GameManager : MonoBehaviour {
 	private bool gotHighscore = false;
 	private int highscoreIndex;
 	private float currentTime = 0f;
+	private int cubeSpawnCounter = 0;
 
 	void Awake(){
 		highscorePath = Application.persistentDataPath + "/highscores.dat";
 
 		Load ();
+
+		snakeHead = GameObject.FindGameObjectWithTag ("Head").GetComponent<SnakeHeadMovement> ();
 	}
 
 	void OnApplicationQuit(){
@@ -76,6 +83,8 @@ public class GameManager : MonoBehaviour {
 		pausePlayImage.sprite = pauseSprite;
 
 		highscoresPanel.SetActive(false);
+
+		mainMenuButton.SetActive (false);
 	}
 
 	// Update is called once per frame
@@ -114,6 +123,24 @@ public class GameManager : MonoBehaviour {
 		lastPickUp = randPickUp;
 		//Debug.Log(pickUps[lastPickUp].name);
 		Instantiate (pickUps [randPickUp], new Vector3 (randX, pickUps [randPickUp].transform.position.y, randZ), pickUps [randPickUp].transform.rotation);
+		cubeSpawnCounter++;
+
+		if (cubeSpawnCounter == spawnCubeRate) {
+			SpawnFallingCube (1);
+			cubeSpawnCounter = 0;
+		}
+	}
+
+	public void SpawnFallingCube(int cubesToSpawn){
+		for (int i = 0; i < cubesToSpawn; i++) {
+			float randX = 0; // initializing
+			float randZ = 0;
+
+			randX = UnityEngine.Random.Range ((gameArea.transform.position.x - rend.bounds.size.x / 2) + spawnPadding, (gameArea.transform.position.x + rend.bounds.size.x / 2) - spawnPadding);
+			randZ = UnityEngine.Random.Range ((gameArea.transform.position.z - rend.bounds.size.z / 2) + spawnPadding, (gameArea.transform.position.z + rend.bounds.size.z / 2) - spawnPadding);
+
+			Instantiate (fallingCube, new Vector3 (randX, fallingCube.transform.position.y, randZ), fallingCube.transform.rotation);
+		}
 	}
 
 	public void RestartLevel(){
@@ -176,6 +203,8 @@ public class GameManager : MonoBehaviour {
 	public void ResetCamera(){
 		main.enabled = true;
 		fps.enabled = false;
+
+		snakeHead.isFPS = false;
 	}
 
 	public void addScore(int toAdd){
@@ -189,10 +218,14 @@ public class GameManager : MonoBehaviour {
 			Paused = true;
 			Time.timeScale = 0;
 
+			mainMenuButton.SetActive (true);
+
 		} else { // game was paused, want to play
 			pausePlayImage.sprite = pauseSprite;
 			Paused = false;
 			Time.timeScale = 1;
+
+			mainMenuButton.SetActive (false);
 		}
 	}
 
@@ -219,5 +252,9 @@ public class GameManager : MonoBehaviour {
 		if (highscores == null) {
 			highscores = new List<int>();
 		}
+	}
+
+	public void MainMenu(){
+		SceneManager.LoadScene ("StartMenu");
 	}
 }
