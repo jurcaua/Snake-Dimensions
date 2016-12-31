@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour {
 	[Header("Game Area")]
 	public GameObject gameArea;
 	public float spawnPadding;
+	public float noSpawnRadius = 4f;
 
 	[Header("UI")]
 	public Text scoreText;
@@ -97,9 +98,12 @@ public class GameManager : MonoBehaviour {
 			randX = UnityEngine.Random.Range ((gameArea.transform.position.x - rend.bounds.size.x / 2) + spawnPadding, (gameArea.transform.position.x + rend.bounds.size.x / 2) - spawnPadding);
 			randZ = UnityEngine.Random.Range ((gameArea.transform.position.z - rend.bounds.size.z / 2) + spawnPadding, (gameArea.transform.position.z + rend.bounds.size.z / 2) - spawnPadding);
 
-			if (!Physics.Raycast (new Vector3 (randX, 1f, randZ), Vector3.down, 1f, 9)) { // check if theres anything where we are spawning the pickup
+			Debug.DrawRay(new Vector3 (randX, 5f, randZ), Vector3.down * 10, Color.red, 2f);
+
+			RaycastHit hit;
+			if (!Physics.SphereCast (new Vector3 (randX, 5f, randZ), noSpawnRadius, Vector3.down, out hit, 10f, 9)) { // check if theres anything where we are spawning the pickup
 				found = true;
-			}
+			} 
 		}
 
 		randPickUp = UnityEngine.Random.Range (0, pickUps.Length); // random pickup from avaliable pickups

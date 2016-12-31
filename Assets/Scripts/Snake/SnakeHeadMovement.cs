@@ -8,6 +8,7 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 	public float bodyPartTimeOut = 0.5f;
 	public float turningRate;
 	public float loadJumpDelay = 0.5f;
+	public float dragThreshold;
 
 	public AudioSource jumpSound;
 
@@ -20,6 +21,14 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 	//private float jumpValue;
 	[HideInInspector] public string directionFacing = "left";
 	private float curTime = 0;
+	private bool Dragging = false;
+
+	private Vector2 startPos = Vector2.zero;
+	private Vector2 endPos = Vector2.zero;
+	private float swipeVerticalDistance;
+	private float swipeHorizontalDistance;
+	private float swipeDistance;
+
 
 	//[HideInInspector] public SphereCollider collider;
 
@@ -48,27 +57,29 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 	}
 
 	void getInput(){
-		if (Input.anyKeyDown && snakeController.isMain) {
+		if (snakeController.isMain && (Input.anyKeyDown || Input.touchCount > 0)) {
 			float pastVert = vertical;
 			float pastHor = horizontal;
 
-			vertical = Input.GetAxisRaw ("Vertical");
-			horizontal = Input.GetAxisRaw ("Horizontal");
+			if (Application.platform == RuntimePlatform.WindowsEditor) {
+				vertical = Input.GetAxisRaw ("Vertical");
+				horizontal = Input.GetAxisRaw ("Horizontal");
 
-			if (isFPS) {
-				if (directionFacing == "up") {
-					// do nothing cause it works normally
-				} else if (directionFacing == "down") {
-					horizontal = -horizontal;
-					vertical = -vertical;
-				} else if (directionFacing == "left") {
-					float temp = vertical;
-					vertical = horizontal;
-					horizontal = -temp;
-				} else if (directionFacing == "right") { 
-					float temp = vertical;
-					vertical = -horizontal;
-					horizontal = temp;
+				if (isFPS) {
+					if (directionFacing == "up") {
+						// do nothing cause it works normally
+					} else if (directionFacing == "down") {
+						horizontal = -horizontal;
+						vertical = -vertical;
+					} else if (directionFacing == "left") {
+						float temp = vertical;
+						vertical = horizontal;
+						horizontal = -temp;
+					} else if (directionFacing == "right") { 
+						float temp = vertical;
+						vertical = -horizontal;
+						horizontal = temp;
+					}
 				}
 			}
 
@@ -88,7 +99,7 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 				horizontal = pastHor;
 			}
 
-			if (Input.GetButtonDown("Jump") && onGround() && curTime > loadJumpDelay){
+			if (Input.GetButtonDown ("Jump")) {
 				//snakeController.sendJump (transform.position, 0);
 				//Destroy(GameObject.FindGameObjectWithTag("JumpTrigger"));
 				//			GameObject temp = Instantiate (jumpTrigger, transform.position, transform.rotation) as GameObject;
@@ -150,12 +161,84 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 	}
 
 	public void Jump(){
-		float jumpValue = snakeController.jumpValue;
+		if (!Dragging && onGround() && curTime > loadJumpDelay){
+			float jumpValue = snakeController.jumpValue;
 
-		jumpSound.Play ();
+			jumpSound.Play ();
 
-		GameObject temp = Instantiate (jumpTrigger, transform.position, transform.rotation) as GameObject; // creating the jump trigger
-		Destroy(temp, snakeController.nBodyParts * bodyPartTimeOut); // destory it after some time according to length of snake
-		r.velocity += new Vector3 (0, jumpValue, 0); // JUMPPP
+			GameObject temp = Instantiate (jumpTrigger, transform.position, transform.rotation) as GameObject; // creating the jump trigger
+			Destroy(temp, snakeController.nBodyParts * bodyPartTimeOut); // destory it after some time according to length of snake
+			r.velocity += new Vector3 (0, jumpValue, 0); // JUMPPP
+		}
+	}
+
+	public void startDrag(){
+		Dragging = true;
+		if (Input.touchCount > 0) {
+			Touch touch = Input.touches [0];
+
+			startPos = touch.position;
+		}
+	}
+
+	public void endDrag(){
+		if (Input.touchCount > 0) {
+			float pastHor = horizontal;
+			float pastVert = vertical;
+
+			Touch touch = Input.touches [0];
+
+			endPos = touch.position;
+
+			// see how far they swiped
+			swipeVerticalDistance = (endPos.y - startPos.y);
+			swipeHorizontalDistance = (endPos.x - startPos.x);
+			swipeDistance = (endPos - startPos).magnitude;
+
+			if (swipeDistance > dragThreshold) {
+				if (startPos != Vector2.zero && endPos != Vector2.zero) {
+					if (Mathf.Abs (swipeVerticalDistance) > Mathf.Abs (swipeHorizontalDistance) && Mathf.Sign (swipeVerticalDistance) > 0) { // going up
+						vertical = 1;
+						horizontal = 0;
+					} else if (Mathf.Abs (swipeVerticalDistance) > Mathf.Abs (swipeHorizontalDistance) && Mathf.Sign (swipeVerticalDistance) < 0) { // going down
+						vertical = -1;
+						horizontal = 0;
+					} else if (Mathf.Abs (swipeVerticalDistance) < Mathf.Abs (swipeHorizontalDistance) && Mathf.Sign (swipeHorizontalDistance) > 0) { // going down
+						vertical = 0;
+						horizontal = 1;
+					} else if (Mathf.Abs (swipeVerticalDistance) < Mathf.Abs (swipeHorizontalDistance) && Mathf.Sign (swipeHorizontalDistance) < 0) { // going down
+						vertical = 0;
+						horizontal = -1;
+					}
+					startPos = Vector2.zero;
+					endPos = Vector2.zero;
+				}
+
+				if (isFPS) {
+					if (directionFacing == "up") {
+						// do nothing cause it works normally
+					} else if (directionFacing == "down") {
+						horizontal = -horizontal;
+						vertical = -vertical;
+					} else if (directionFacing == "left") {
+						float temp = vertical;
+						vertical = horizontal;
+						horizontal = -temp;
+					} else if (directionFacing == "right") { 
+						float temp = vertical;
+						vertical = -horizontal;
+						horizontal = temp;
+					}
+				}
+
+				if (vertical == -pastVert || horizontal == -pastHor) {
+					vertical = pastVert;
+					horizontal = pastHor;
+				}
+			} else {
+				Jump ();
+			}
+		}
+		Dragging = false;
 	}
 }
