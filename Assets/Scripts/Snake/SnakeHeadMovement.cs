@@ -33,11 +33,13 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 	//[HideInInspector] public SphereCollider collider;
 
 	private SnakeController snakeController;
+	private GameManager gameManager;
 
 	// Use this for initialization
 	void Start () {
 		r = GetComponent<Rigidbody> ();
 		snakeController = GetComponentInParent<SnakeController> ();
+		gameManager = GameObject.FindGameObjectWithTag ("MainCamera").GetComponent<GameManager>();
 
 		//collider = GetComponent<SphereCollider> ();
 
@@ -161,7 +163,7 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 	}
 
 	public void Jump(){
-		if (!Dragging && onGround() && curTime > loadJumpDelay){
+		if (!Dragging && onGround() && curTime > loadJumpDelay && !gameManager.Paused){
 			float jumpValue = snakeController.jumpValue;
 
 			jumpSound.Play ();

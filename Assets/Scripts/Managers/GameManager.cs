@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour {
 	//private SnakeController snakeController;
 	private int lastPickUp = 0;
 	private int score = 0;
-	private bool Paused = false;
+	[HideInInspector] public bool Paused = false;
 	private bool GameOver = false;
 	private List<int> highscores;
 	private int maxHighscores = 5;
