@@ -4,4 +4,4 @@ The first game I ever made was Snake. It's what got me interested in game develo
 
 I decided to make my first stand-alone Unity project a 3D version of Snake.
 
-When finished, it will be put up on the Google Play Store.
+Click [here](https://play.google.com/store/apps/details?id=com.jurk.co.snakedimensions) for the Goolge Play Alpha Release link.
