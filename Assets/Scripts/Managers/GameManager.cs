@@ -59,11 +59,13 @@ public class GameManager : MonoBehaviour {
 
 		Load ();
 
+		//ClearHighScore ();
+
 		snakeHead = GameObject.FindGameObjectWithTag ("Head").GetComponent<SnakeHeadMovement> ();
 	}
 
 	void OnApplicationQuit(){
-		//Save ();
+		Save ();
 	}
 
 	// Use this for initialization
@@ -171,7 +173,7 @@ public class GameManager : MonoBehaviour {
 		if (highscores.Count == 0) {
 			highscores.Add (score);
 		} else {
-			for (int i = 0; i < highscores.Count; i++) {
+			for (int i = 0; i < maxHighscores; i++) {
 				if (score > highscores [i]) {
 					highscores.Insert (i, score);
 					gotHighscore = true;
@@ -198,6 +200,14 @@ public class GameManager : MonoBehaviour {
 		if (gotHighscore) {
 			scoreTexts[highscoreIndex].text += " NEW HIGHSCORE!";
 		}
+	}
+
+	void ClearHighScore(){
+		highscores.Clear ();
+		for (int i = 0; i < 5; i++) {
+			highscores.Add (0);
+		}
+		Save ();
 	}
 
 	public void ResetCamera(){
@@ -251,6 +261,7 @@ public class GameManager : MonoBehaviour {
 		} 
 		if (highscores == null) {
 			highscores = new List<int>();
+			ClearHighScore ();
 		}
 	}
 
