@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void OnApplicationQuit(){
-		Save ();
+		//Save ();
 	}
 
 	// Use this for initialization
@@ -181,14 +181,12 @@ public class GameManager : MonoBehaviour {
 					break;
 				}
 			}
-
 			if (highscores.Count > maxHighscores) {
 				for (int i = highscores.Count - 1; i > maxHighscores - 1; i--) {
 					highscores.RemoveAt (i);
 				}
 			}
 		}
-
 		Save ();
 	}
 
@@ -204,10 +202,9 @@ public class GameManager : MonoBehaviour {
 
 	void ClearHighScore(){
 		highscores.Clear ();
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < maxHighscores; i++) {
 			highscores.Add (0);
 		}
-		Save ();
 	}
 
 	public void ResetCamera(){
@@ -223,14 +220,14 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void Pause(){
-		if (!Paused) { // game was playing, want to pause
+		if (!Paused && !GameOver) { // game was playing, want to pause
 			pausePlayImage.sprite = playSprite;
 			Paused = true;
 			Time.timeScale = 0;
 
 			mainMenuButton.SetActive (true);
 
-		} else { // game was paused, want to play
+		} else if (!GameOver) { // game was paused, want to play
 			pausePlayImage.sprite = pauseSprite;
 			Paused = false;
 			Time.timeScale = 1;
@@ -251,6 +248,10 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void Load(){
+		if (highscores == null) {
+			highscores = new List<int> ();
+			ClearHighScore ();
+		}
 		if (File.Exists (highscorePath)) {
 			BinaryFormatter bf = new BinaryFormatter ();
 			FileStream file = File.Open (highscorePath, FileMode.Open);
@@ -259,10 +260,6 @@ public class GameManager : MonoBehaviour {
 
 			highscores = scores.highscores;
 		} 
-		if (highscores == null) {
-			highscores = new List<int>();
-			ClearHighScore ();
-		}
 	}
 
 	public void MainMenu(){
