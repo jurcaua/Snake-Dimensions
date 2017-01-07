@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour {
 	public GameObject[] pickUps;
 
 	private Renderer rend;
-	//private SnakeController snakeController;
+	private SnakeController snakeController;
 	private SnakeHeadMovement snakeHead;
 	private int lastPickUp = 0;
 	private int score = 0;
@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour {
 
 		rend = gameArea.GetComponent<Renderer> ();
 
-		//snakeController = GameObject.FindGameObjectWithTag ("Snake").GetComponent<SnakeController> ();
+		snakeController = GameObject.FindGameObjectWithTag ("Snake").GetComponent<SnakeController> ();
 
 		SpawnPickUp ();
 
@@ -96,6 +96,10 @@ public class GameManager : MonoBehaviour {
 			if (Time.realtimeSinceStartup > currentTime + timeBeforeRestart && Input.anyKey) {
 				SceneManager.LoadScene ("Main");
 			}
+		}
+
+		if (Input.GetKeyDown (KeyCode.Escape) && snakeController.isMain) {
+			Pause ();
 		}
 	}
 
