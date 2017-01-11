@@ -11,16 +11,21 @@ Click [here](https://play.google.com/store/apps/details?id=com.jurk.co.snakedime
 ##**Screenshots**:
 
 **Start Screen**:
-![Start Screen](https://github.com/jurcaua/github_image_hosting/blob/master/Snake%20DIMENSIONS/Screenshot_20170102-123935.png "Start Screen")
+
+<img src="https://github.com/jurcaua/github_image_hosting/blob/master/Snake%20DIMENSIONS/Screenshot_20170102-123935.png" height="400">
 
 **Controls Screen**:
-![Controls Screen](https://github.com/jurcaua/github_image_hosting/blob/master/Snake%20DIMENSIONS/Screenshot_20170102-123958.png "Controls Screen")
+
+<img src="https://github.com/jurcaua/github_image_hosting/blob/master/Snake%20DIMENSIONS/Screenshot_20170102-123958.png" height="400">
 
 **Normal Game View**:
-![Normal Game View](https://github.com/jurcaua/github_image_hosting/blob/master/Snake%20DIMENSIONS/Screenshot_20170102-124203.png "Normal Game View")
+
+<img src="https://github.com/jurcaua/github_image_hosting/blob/master/Snake%20DIMENSIONS/Screenshot_20170102-124203.png" height="400">
 
 **FPS Game View**:
-![FPS Game View](https://github.com/jurcaua/github_image_hosting/blob/master/Snake%20DIMENSIONS/Screenshot_20170102-124324.png "FPS Game View")
+
+<img src="https://github.com/jurcaua/github_image_hosting/blob/master/Snake%20DIMENSIONS/Screenshot_20170102-124324.png" height="400">
 
 **End Game Highscores**:
-![End Game Highscores](https://github.com/jurcaua/github_image_hosting/blob/master/Snake%20DIMENSIONS/Screenshot_20170102-124602.png "End Game Highscores")
+
+<img src="https://github.com/jurcaua/github_image_hosting/blob/master/Snake%20DIMENSIONS/Screenshot_20170102-124602.png" height="400">
