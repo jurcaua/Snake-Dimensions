@@ -96,7 +96,7 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 				horizontal = pastHor;
 			}
 
-			if (vertical == -pastVert || horizontal == -pastHor) {
+			if ((vertical == -pastVert || horizontal == -pastHor) && snakeController.nBodyParts != 0) {
 				vertical = pastVert;
 				horizontal = pastHor;
 			}
@@ -233,7 +233,7 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 					}
 				}
 
-				if (vertical == -pastVert || horizontal == -pastHor) {
+				if ((vertical == -pastVert || horizontal == -pastHor) && snakeController.nBodyParts != 0) {
 					vertical = pastVert;
 					horizontal = pastHor;
 				}
