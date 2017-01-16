@@ -8,6 +8,10 @@ I decided to make my first stand-alone Unity project a 3D version of Snake.
 
 Click [here](https://play.google.com/store/apps/details?id=com.jurk.co.snakedimensions) for the Goolge Play Alpha Release link.
 
+##**Gameplay Footage**:
+
+Here is a [YouTube link](https://www.youtube.com/watch?v=X5Rv26UH0jo)!
+
 ##**Screenshots**:
 
 **Start Screen**:
