@@ -78,7 +78,9 @@ public class GameManager : MonoBehaviour {
 
 		snakeController = GameObject.FindGameObjectWithTag ("Snake").GetComponent<SnakeController> ();
 
-		SpawnPickUp ();
+		if (snakeController.isMain) {
+			SpawnPickUp ();
+		}
 
 		scoreText.text = "0";
 
@@ -213,7 +215,9 @@ public class GameManager : MonoBehaviour {
 
 	public void ResetCamera(){
 		main.enabled = true;
-		fps.enabled = false;
+		if (fps != null) {
+			fps.enabled = false;
+		}
 
 		snakeHead.isFPS = false;
 	}
