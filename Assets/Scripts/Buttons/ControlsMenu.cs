@@ -17,12 +17,6 @@ public class ControlsMenu : MonoBehaviour {
 			controlPanels [i].SetActive (false);
 		}
 	}
-
-	void Update(){
-		if (Input.GetKeyDown (KeyCode.Escape)) {
-			Back ();
-		}
-	}
 	
 	public void Next(){
 		if (nextText.text == "Start Menu") {
@@ -36,18 +30,6 @@ public class ControlsMenu : MonoBehaviour {
 			if (currentPanel == controlPanels.Length - 1){
 				nextText.text = "Start Menu";
 			}
-		}
-	}
-
-	void Back(){
-		if (currentPanel == 0) {
-			SceneManager.LoadScene ("StartMenu");
-		} else {
-			currentPanel--;
-			controlPanels [currentPanel + 1].SetActive (false);
-			controlPanels [currentPanel].SetActive (true);
-
-			nextText.text = "Next";
 		}
 	}
 }
