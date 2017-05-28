@@ -63,7 +63,10 @@ public class SnakeHeadMovement : MonoBehaviour, JumpingObject {
 			float pastVert = vertical;
 			float pastHor = horizontal;
 
-			if (Application.platform == RuntimePlatform.WindowsEditor) {
+			if (Application.platform == RuntimePlatform.WindowsEditor || 
+                Application.platform == RuntimePlatform.WebGLPlayer ||
+                Application.platform == RuntimePlatform.WindowsPlayer) {
+
 				vertical = Input.GetAxisRaw ("Vertical");
 				horizontal = Input.GetAxisRaw ("Horizontal");
 

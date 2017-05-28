@@ -21,7 +21,7 @@ public class AddLengthPickUp : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other){
-		if (other.tag == "Head") {
+		if (other.tag == "Head" && gameManager != null) {
 			gameManager.addScore (scoreValue);
 			gameManager.collectSound.Play ();
 

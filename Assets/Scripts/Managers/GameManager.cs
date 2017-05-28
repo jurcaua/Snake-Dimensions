@@ -82,13 +82,21 @@ public class GameManager : MonoBehaviour {
 			SpawnPickUp ();
 		}
 
-		scoreText.text = "0";
+        if (scoreText != null) {
+            scoreText.text = "0";
+        }
 
-		pausePlayImage.sprite = pauseSprite;
+        if (pausePlayImage != null) {
+            pausePlayImage.sprite = pauseSprite;
+        }
 
-		highscoresPanel.SetActive(false);
+        if (highscoresPanel != null) {
+            highscoresPanel.SetActive(false);
+        }
 
-		mainMenuButton.SetActive (false);
+        if (mainMenuButton != null) {
+            mainMenuButton.SetActive(false);
+        }
 	}
 
 	// Update is called once per frame
