@@ -4,15 +4,15 @@ The first game I ever made was Snake. It's what got me interested in game develo
 
 I decided to make my first stand-alone Unity project a 3D version of Snake.
 
-##**Google Play Store Link**:
+## **Google Play Store Link**:
 
 Click [here](https://play.google.com/store/apps/details?id=com.jurk.co.snakedimensions) for the Google Play link!
 
-##**Gameplay Footage**:
+## **Gameplay Footage**:
 
 Here is a [YouTube link](https://www.youtube.com/watch?v=X5Rv26UH0jo)!
 
-##**Screenshots**:
+## **Screenshots**:
 
 **Start Screen**:
 ![Start Screen](https://github.com/jurcaua/github_image_hosting/blob/master/Snake%20DIMENSIONS/Screenshot_20170102-123935.png "Start Screen")
